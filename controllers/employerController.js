@@ -102,7 +102,6 @@ export const getAllEmployees = async (req, res) => {
 //update
 export const updateEmployee = async (req, res) => {
   try {
-    console.log(req.body);
     const { error, value } = employerSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.message });
@@ -119,7 +118,10 @@ export const updateEmployee = async (req, res) => {
       fs.mkdirSync(imagesDir, { recursive: true });
     }
 
-    let updateData = { ...realValue };
+    const employee = await Employer.findById(req.params.id);
+    if (!employee) {
+      return res.status(404).json({ error: "Service not found" });
+    }
 
     if (req.files && req.files.image) {
       const { image } = req.files;
@@ -135,52 +137,33 @@ export const updateEmployee = async (req, res) => {
           return res.status(500).json({ error: "Error during file upload" });
         }
 
-        if (fs.existsSync(path.join("public", service.image))) {
-          fs.unlinkSync(path.join("public", service.image)); // Supprimer l'ancienne image
-        }
+        fs.unlinkSync(path.join("public", employee.image)); // Supprimer l'ancienne image
+        employee.image = newFileName;
 
-        const realValueWithImage = {
-          ...realValue,
-          image: newFileName,
-        };
-
-        Employer.findByIdAndUpdate(
-          req.params.id,
-          realValueWithImage,
-          { new: true },
-          (updateError, updatedEmployee) => {
-            if (updateError) {
-              return res
-                .status(500)
-                .json({ error: "Error during employee update", updateError });
-            }
-            if (!updatedEmployee) {
-              return res.status(404).json({ error: "Employee not found" });
-            }
-            res.json(updatedEmployee);
-          }
-        );
+        employee.set(realValue);
+        employee
+          .save()
+          .then((updatedEmployee) => res.json(updatedEmployee))
+          .catch((updateError) =>
+            res
+              .status(500)
+              .json({ error: "Error during service update", updateError })
+          );
       });
     } else {
-      Employer.findByIdAndUpdate(
-        req.params.id,
-        updateData,
-        { new: true },
-        (updateError, updatedEmployee) => {
-          if (updateError) {
-            return res
-              .status(500)
-              .json({ error: "Error during service update", updateError });
-          }
-          if (!updatedEmployee) {
-            return res.status(404).json({ error: "Employee not found" });
-          }
-          res.json(updatedEmployee);
-        }
-      );
+      employee.set(realValue);
+      employee
+        .save()
+        .then((updatedEmployee) => res.json(updatedEmployee))
+        .catch((updateError) =>
+          res
+            .status(500)
+            .json({ error: "Error during service update", updateError })
+        );
     }
-  } catch (err) {
-    res.status(500).json({ error: "Internal server error", err });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
