@@ -34,6 +34,7 @@ app.use(
     credentials: true,
   })
 );
+app.options("*", cors());
 app.use(fileUpload());
 app.use(express.static(path.resolve("public")));
 app.use(
