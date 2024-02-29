@@ -57,6 +57,23 @@ app.use((req, res, next) => {
   res.locals.error = req.flash("error");
   res.locals.success = req.flash("success");
   res.locals.user = req.user ? req.user : null;
+
+  res.setHeader(
+    "Access-Control-Allow-Origin",
+    "https://salon-beauty-frontend-6qvx.vercel.app"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+
+  res.setHeader("Access-Control-Allow-Credentials", true);
   next();
 });
 
