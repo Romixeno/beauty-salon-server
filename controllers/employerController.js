@@ -135,9 +135,13 @@ export const updateEmployee = async (req, res) => {
           return res.status(500).json({ error: "Error during file upload" });
         }
 
+        if (fs.existsSync(path.join("public", service.image))) {
+          fs.unlinkSync(path.join("public", service.image)); // Supprimer l'ancienne image
+        }
+
         const realValueWithImage = {
           ...realValue,
-          image: newFileName, // Assuming newFileName is defined above
+          image: newFileName,
         };
 
         Employer.findByIdAndUpdate(
