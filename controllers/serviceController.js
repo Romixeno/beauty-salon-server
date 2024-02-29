@@ -121,9 +121,9 @@ export const updateService = async (req, res) => {
           return res.status(500).json({ error: "Error during file upload" });
         }
 
-        if (fs.existsSync(path.join("public", service.image))) {
-          fs.unlinkSync(path.join("public", service.image)); // Supprimer l'ancienne image
-        }
+        // if (fs.existsSync(path.join("public", service.image))) {
+        //   fs.unlinkSync(path.join("public", service.image)); // Supprimer l'ancienne image
+        // }
         service.image = newFileName;
         service.set(value);
         service
@@ -160,7 +160,7 @@ export const deleteService = async (req, res) => {
       return res.status(404).json({ error: "Service not found" });
     }
 
-    fs.unlinkSync(path.join("public", service.image));
+    // fs.unlinkSync(path.join("public", service.image));
 
     await service.deleteOne();
     res.json({ message: "Service deleted successfully" });

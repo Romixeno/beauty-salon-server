@@ -137,8 +137,8 @@ export const updateEmployee = async (req, res) => {
           return res.status(500).json({ error: "Error during file upload" });
         }
 
-        fs.unlinkSync(path.join("public", employee.image)); // Supprimer l'ancienne image
-        employee.image = newFileName;
+        // fs.unlinkSync(path.join("public", employee.image)); // Supprimer l'ancienne image
+        // employee.image = newFileName;
 
         employee.set(realValue);
         employee
