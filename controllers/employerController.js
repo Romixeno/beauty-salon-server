@@ -138,7 +138,7 @@ export const updateEmployee = async (req, res) => {
         }
 
         // fs.unlinkSync(path.join("public", employee.image)); // Supprimer l'ancienne image
-        // employee.image = newFileName;
+        employee.image = newFileName;
 
         employee.set(realValue);
         employee
