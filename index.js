@@ -29,7 +29,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://salonbeauty.netlify.app",
+    origin: "https://salon-beauty-frontend-6qvx.vercel.app",
     methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD", "DELETE", "PATCH"],
     credentials: true,
   })
