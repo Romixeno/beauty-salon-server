@@ -102,6 +102,7 @@ export const getAllEmployees = async (req, res) => {
 //update
 export const updateEmployee = async (req, res) => {
   try {
+    console.log(req.body);
     const { error, value } = employerSchema.validate(req.body);
     if (error) {
       return res.status(400).json({ error: error.message });
